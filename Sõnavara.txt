@@ -1,1 +1,18 @@
-
+andmebaas - AB
+andmebaaside haldus - адмениснирование баз данных
+andmebaaside haldus - управление базой данных
+andmebaasi hajdssüsteem (ABHS) - система управления БД (SQL serever/XAMPP/Oracle)
+andmed - данные
+tabel - доска
+veerg = väli столбец = поле
+rida = kirje 
+päring - запрос
+loo - создвать
+salvesta - сохранять
+laadi alla - скачать
+laadi üles - закачать
+rakendus - приложение
+varundamine - резервное копирование
+taastamine - восстановление 
+päringukeel - язык запроса 
+relatsiooni andmebaas - связь
