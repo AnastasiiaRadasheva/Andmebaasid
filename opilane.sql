@@ -94,7 +94,7 @@ aasta char(4),
 opetaja varchar(25),
 opilaneID int not null,
 FOREIGN KEY (opilaneID) REFERENCES opilane(opilaneID),
-hinne int check (hinne BETWEEN 1 AND 5)
+hinne int not null,
 )
 SELECT * FROM keeleValik;
 SELECT * FROM Language;
