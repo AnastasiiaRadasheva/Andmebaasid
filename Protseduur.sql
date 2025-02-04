@@ -61,3 +61,18 @@ WHERE linnNimi LIKE @taht + '%';
 END;
 --kurse
 EXEC linnaOtsing T;
+
+
+
+
+---------------------------------------------------------------------------
+KAASUTAME XAMPP /localhost
+Create table linn(
+LinnID int Primary Key AUTO_INCREMENT,
+linnNimi varchar(30),
+rahvaArv int);
+insert into linn(linnNimi, rahvaArv)
+values ('tallinn', 60000),
+('parnu', 30000), 
+('tartu', 12444);
+
