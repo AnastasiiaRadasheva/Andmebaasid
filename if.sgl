@@ -1,0 +1,95 @@
+create database AdmebaasRadasheva
+use AdmebaasRadasheva;
+Create table linn(
+LinnID int Primary Key identity(1,1),
+linnNimi varchar(30),
+rahvaArv int);
+select * from linn;
+insert into linn(linnNimi, rahvaArv)
+values ('narva', 60000),
+('mardu', 30000) 
+create procedure lisaLinn
+@lnimi varchar(30),
+@rArv int
+as
+begin 
+
+insert into linn(linnNimi, rahvaArv)
+values (@lnimi, @rArv);
+select * from linn;
+
+end;
+AS
+ BEGIN
+ SELECT * FROM linn;
+ DELETE FROM linn WHERE linnID=@deleteID;
+ SELECT * FROM linn;
+ END;
+ --kutse 
+ EXEC kustutataLinn;
+ --veeru lisamine (uue)
+ Alter table linn ADD test int;
+ --veeru kustutamine
+ alter table linn drop column test;
+ create procedure veeruLisaKustuta
+ @valik varchar(20),
+ @veerunimi varchar(20),
+ @tyyp varchar(20) =null
+
+ as
+ begin
+ declare @sgltegevus as varchar(max)
+ set @sgltegevus=case
+ when @valik= 'add' then concat('Alter table linn ADD ', @veerunimi, ' ', @tyyp)
+ when @valik= 'drop' then concat('Alter table linn DROP COLUMP', @veerunimi)
+ end;
+ print @sgltegevus;
+ Begin
+ exec(@sgltegevus)
+ end
+ end;
+ --kutse 
+ exec veeruLisaKustuta @valik='add', @veerunimi='test3', @tyyp='int';
+ select * from linn;
+ drop procedure veeruLisaKustutaTabelis
+ create procedure veeruLisaKustutaTabelis
+ @valik varchar(20),
+ @tabelinimi varchar(20),
+ @veerunimi varchar(20),
+ @tyyp varchar(20) =null
+
+ as
+ begin
+ declare @sgltegevus as varchar(max)
+ set @sgltegevus=case
+ when @valik= 'add' then concat(' Alter table ', @tabelinimi, ' ADD ', @veerunimi, ' ', @tyyp)
+ when @valik= 'drop' then concat(' Alter table ', @tabelinimi, ' Drop column ', @veerunimi )
+ end;
+ print @sgltegevus;
+ Begin
+ exec(@sgltegevus)
+ end
+ end;
+ --kutse
+ exec veeruLisaKustutaTabelis @valik='add', @tabelinimi='linn', @veerunimi='test5 ', @tyyp='int';
+ select * from linn;
+  exec veeruLisaKustutaTabelis @valik='drop', @tabelinimi='linn', @veerunimi='test5';
+ select * from linn;
+
+ --protseduur tingimusega 
+ create procedure rahvahinnang
+ @piir int
+ as
+ begin
+ select linnNimi, rahvaArv, Iif(rahvaArv<@piir, 'väike linn', 'suur linn')as Hinnang
+ from linn;
+ end;
+ drop procedure rahvahinnang
+ EXEC rahvaHinnang 30001
+ --agregaat funktsioonid: sum(), avg(), Min(), Max(), count()
+ create procedure kokkuRahvaArv
+ as
+ begin
+ select sum(rahvaArv) as ' kokku rahvaArv ', AVG(rahvaArv ) AS 'keskmine rahvaArv', count(*) as 'linnade arv'
+ from linn;
+ end;
