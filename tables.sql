@@ -48,10 +48,10 @@ FOREIGN KEY (kategooria_id) REFERENCES kategooria(kategooria_id),
 INSERT INTO retsept (retsept_nimi, kirjeldus, juhend, sisestatud_kp, kasutaja_id, kategooria_id)
 VALUES 
     ('Magus retsept', 'Magus dessert', 'Küpseta 30 minutit.', '2025-02-14', 1, 1),
-    ('Hapu retsept', 'Kiseldatud salat', 'Sega koostisosad.', '2025-02-14', 1, 2),
-    ('Terav retsept', 'Vürtsikas liha', 'Küpseta vürtsidega.', '2025-02-14', 1, 3),
-    ('Meat retsept', 'Mugav liharoog', 'Sega köögiviljad ja liha.', '2025-02-14', 1, 4),
-    ('Drink retsept', 'Maitsev jook', 'Sega viljad ja vesi.', '2025-02-14', 1, 5);
+    ('Hapu retsept', 'Kiseldatud salat', 'Sega koostisosad.', '2025-02-14', 2, 2),
+    ('Terav retsept', 'Vürtsikas liha', 'Küpseta vürtsidega.', '2025-02-14', 3, 3),
+    ('Meat retsept', 'Mugav liharoog', 'Sega köögiviljad ja liha.', '2025-02-14', 4, 4),
+    ('Drink retsept', 'Maitsev jook', 'Sega viljad ja vesi.', '2025-02-14', 5, 5);
 
 drop table retsept;
 select * from retsept;
