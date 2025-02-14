@@ -243,6 +243,59 @@ EXEC DeleteTehtud @tehtud_id = 1;
 select * from Tehtud
 
 ------------------------------------------
-SELECT k.eesnimi, k.perenimi, r.retsept_nimi
-FROM kasutaja k
-JOIN retsept r ON k.kasutaja_id = r.kasutaja_id;
+
+--minu table
+
+
+--Portsjoni kaalud (Вес порции)
+create table kaalud(
+kaalud_id int primary key identity(1,1),
+kaal int,
+kasutaja_id int,
+retsept_id int,
+FOREIGN KEY (kasutaja_id) REFERENCES kasutaja(kasutaja_id),
+FOREIGN KEY (retsept_id) REFERENCES retsept(retsept_id),
+);
+drop table kaalud 
+insert into kaalud(kaal)
+values (300),(250), (220), (600), (467);
+
+
+
+CREATE PROCEDURE InsertKaalud 
+    @kaal INT,
+    @kasutaja_id INT,
+    @retsept_id INT
+AS
+BEGIN
+    INSERT INTO kaalud (kaal, kasutaja_id, retsept_id)
+    VALUES (@kaal, @kasutaja_id, @retsept_id);
+END;
+EXEC InsertKaalud @kaal = 300, @kasutaja_id = 1, @retsept_id = 5;
+
+
+
+
+CREATE PROCEDURE UpdateKaalud
+    @kaalud_id INT,
+    @kaal INT
+AS
+BEGIN
+    UPDATE kaalud
+    SET kaal = @kaal
+    WHERE kaalud_id = @kaalud_id;
+END;
+EXEC UpdateKaalud @kaalud_id = 1, @kaal = 350;
+
+
+
+
+CREATE PROCEDURE DeleteKaalud
+    @kaalud_id INT
+AS
+BEGIN
+    DELETE FROM kaalud
+    WHERE kaalud_id = @kaalud_id;
+END;
+EXEC DeleteKaalud @kaalud_id = 3;
+
