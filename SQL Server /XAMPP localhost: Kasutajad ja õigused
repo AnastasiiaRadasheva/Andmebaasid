@@ -1,0 +1,6 @@
+create TABLE movies (
+    id int primary key AUTO_INCREMENT,    
+    movieNimi varchar(20),
+    movieYear int,
+    movieDir varchar(20),
+    MOvieCost decimal(7,2))
