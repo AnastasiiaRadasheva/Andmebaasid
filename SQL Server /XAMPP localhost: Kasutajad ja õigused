@@ -4,3 +4,7 @@ create TABLE movies (
     movieYear int,
     movieDir varchar(20),
     MOvieCost decimal(7,2))
+create table guest(
+    id int primary key AUTO_INCREMENT,
+	name VARCHAR(50)
+);
