@@ -1,0 +1,123 @@
+create database books
+use  books
+create table students (
+    studentid int primary key,
+    name nvarchar(50),
+    surname nvarchar(50),
+    birthdate date,
+    gender nvarchar(10),
+    class nvarchar(20),
+    point int
+);
+insert into students (studentid, name, surname, birthdate, gender, class, point)
+values
+(1, 'Ivan', 'Ivanov', '2000-05-15', 'Mees', '11A', 90),
+(2, 'Anna', 'Petrova', '2001-03-20', 'Naine', '10B', 85),
+(3, 'Maksim', 'Sidorov', '2000-11-10', 'Mees', '11B', 95),
+(4, 'Elena', 'Kuznetsova', '1999-07-25', 'Naine', '12A', 80),
+(5, 'Dmitri', 'Morozov', '2002-02-18', 'Mees', '10A', 88);
+
+create table authors (
+    authorid int primary key,
+    name nvarchar(50),
+    surname nvarchar(50)
+);
+insert into authors (authorid, name, surname)
+values
+(1, 'Aleksander', 'Pushkin'),
+(2, 'Lev', 'Tolstoi'),
+(3, 'Fjodor', 'Dostoevsky'),
+(4, 'Anton', 'Tšehhov'),
+(5, 'Ivan', 'Turgenev');
+create table types (
+    typeid int primary key,
+    name nvarchar(50)
+);
+insert into types (typeid, name)
+values
+(1, 'Romaan'),
+(2, 'Draama'),
+(3, 'Luule'),
+(4, 'Seiklus'),
+(5, 'Fantaasia');
+create table books (
+    bookid int primary key,
+    name nvarchar(100),
+    pagecount int,
+    point int,
+    authorid int,
+    typeid int,
+    foreign key (authorid) references authors(authorid),
+    foreign key (typeid) references types(typeid)
+);
+insert into books (bookid, name, pagecount, point, authorid, typeid)
+values
+(1, 'Eugene Onegin', 300, 95, 1, 3),
+(2, 'Sõda ja rahu', 1200, 90, 2, 1),
+(3, 'Kuritegu ja karistus', 550, 92, 3, 1),
+(4, 'Tšehhovi lood', 350, 88, 4, 2),
+(5, 'Isad ja lapsed', 400, 85, 5, 1);
+
+create table borrows (
+    borrowid int primary key,
+    studentid int,
+    bookid int,
+    takendate date,
+    broughtdate date,
+    returned bit,
+    foreign key (studentid) references students(studentid),
+    foreign key (bookid) references books(bookid)
+);
+insert into borrows (borrowid, studentid, bookid, takendate, broughtdate, returned)
+values
+(1, 1, 2, '2025-03-01', '2025-03-10', 1),
+(2, 2, 1, '2025-03-02', '2025-03-15', 0),
+(3, 3, 3, '2025-02-20', '2025-03-05', 1),
+(4, 4, 4, '2025-03-05', '2025-03-12', 0),
+(5, 5, 5, '2025-03-08', '2025-03-14', 1);
+create table kauplused (
+    poodid int primary key,
+    nimi nvarchar(100),
+    bookid int,
+    asukoht nvarchar(100)
+);
+insert into kauplused (poodid, nimi, bookid, asukoht)
+values
+(1, 'Raamatupood "Lood"', 3, 'Tallinn, Loo 5'),
+(2, 'Raamatud ja kohv', 5 , 'Tartu, Põllu 7'),
+(3, 'Kultuuri nurgake', 2 , 'Pärnu, Liiva 3'),
+(4, 'Õpikukohvik', 1 , 'Narva, Metsa 8'),
+(5, 'Tarkuse raamatukohvik', 4 , 'Kohtla-Järve, Viru 9');
+
+drop table kauplused 
+
+
+alter table kauplused
+ADD CONSTRAINT fk_kauplused_books
+foreign key (bookid) references books(bookid);
+
+
+
+--räringud
+--#1
+SELECT * from students 
+where name = 'Ivan'
+--#2
+SELECT studentid, name, surname, birthdate, gender, class, point
+FROM students
+WHERE gender = 'Mees'; 
+
+--#4
+select avg(pagecount) as keskmine_lehekulgede_arv
+from books;
+
+select * from students, borrows
+--#5
+select name as opilase_nimi, surname as opilase_perekonnanimi,
+year(getdate()) - year(birthdate) as vanus
+from students;
+--№6
+select students.name, students.surname, returned, class, takendate, broughtdate
+from borrows, students
+where returned = 0 and borrows.studentid= students.studentid;
+
