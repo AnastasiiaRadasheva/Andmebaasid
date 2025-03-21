@@ -7,86 +7,94 @@ perenimi varchar(50) not null,
 email varchar(150));
 
 insert into kasutaja(eesnimi, perenimi, email)
-values ('Artem', 'Põldsaar', 'Põldsaar@gmail.com');
+values ('Adriana', 'Pikaljov', 'pikaljov@gmail.com');
 
-select * from kasutaja;
 
-create table kategooria(
-kategooria_id int primary key identity(1,1),
-kategooria_nimi varchar(50));
 
-insert into kategooria(kategooria_nimi)
-values ('xleb'), ('kinder'), ('moloko'), ('raamat'), 
-('sõnastik'), ('kogus');
+create table kategooria (
+kategooria_id int primary key identity (1,1),
+kategooria_nimi varchar (50));
+insert into kategooria (kategooria_nimi)
+values('supp'), ('magus'), ('soolane'), ('jook'), ('köögiviljad');
+select * from kategooria
 
-delete from kategooria;
 
-create table toiduaine(
-toiduaine_id int primary key identity(1,1),
+create table toiduaine (
+toiduaine_id int primary key identity (1,1),
 toiduaine_nimi varchar(100));
-insert into kategooria(kategooria_nimi)
-values ('magus'), ('hapu'), ('terav'), ('meat'), 
-('drink');
-create table yhik(
-yhik_id int primary key identity(1,1),
-yhik_nimi varchar(100));
-insert into yhik(yhik_nimi)
-values ('ml'), ('g'), ('kl'), ('tl'), 
-('sl');
+insert into toiduaine (toiduaine_nimi)
+values ('munad'), ('juust'), ('piim'), ('õlu'), ('soola');
 
-create table retsept(
-retsept_id int primary key identity(1,1),
-retsept_nimi varchar(100),
-kirjeldus varchar(200),
-juhend varchar(500),
+
+
+create table yhik (
+yhik_id int primary key identity (1,1),
+yhik_nimi varchar(100));
+insert into yhik (yhik_nimi)
+values ('ml'), ('g'), ('kg'), ('tl'), ('sl');
+
+
+create table retsept (
+retsept_id int primary key identity (1,1),
+retsepti_nimi varchar (100),
+kirjendus varchar(200),
+juhend varchar (500),
 sisestatud_kp date,
 kasutaja_id int,
+foreign key (kasutaja_id) references kasutaja(kasutaja_id),
 kategooria_id int,
-FOREIGN KEY (kasutaja_id) REFERENCES kasutaja(kasutaja_id),
-FOREIGN KEY (kategooria_id) REFERENCES kategooria(kategooria_id),
-);
-INSERT INTO retsept (retsept_nimi, kirjeldus, juhend, sisestatud_kp, kasutaja_id, kategooria_id)
-VALUES 
-    ('Magus retsept', 'Magus dessert', 'Küpseta 30 minutit.', '2025-02-14', 1, 1),
-    ('Hapu retsept', 'Kiseldatud salat', 'Sega koostisosad.', '2025-02-14', 2, 2),
-    ('Terav retsept', 'Vürtsikas liha', 'Küpseta vürtsidega.', '2025-02-14', 3, 3),
-    ('Meat retsept', 'Mugav liharoog', 'Sega köögiviljad ja liha.', '2025-02-14', 4, 4),
-    ('Drink retsept', 'Maitsev jook', 'Sega viljad ja vesi.', '2025-02-14', 5, 5);
+foreign key (kategooria_id) references kategooria(kategooria_id));
+insert into retsept (retsepti_nimi, kirjendus, juhend, sisestatud_kp, kasutaja_id, kategooria_id)
+values('porgandikook', 'väga magus', 'kasuta porgandid', '2025-02-14', 2, 2),
+('pannkoogid', 'väga magus', 'kasuta elektripliit', '2025-02-14', 3, 2),
+('grill', 'nii soola', 'kasuta grillpott', '2025-02-14', 4, 2),
+('supp', 'nii sola', 'kasuta elektripliit', '2025-02-12', 5, 1);
 
-drop table retsept;
-select * from retsept;
+
+
 create table koostis(
-koostis_id int primary key identity(1,1),
+koostis_id int primary key identity (1,1),
 kogus int,
-yhik_id int,
+retsept_retsept_id int,
+foreign key (retsept_retsept_id) references retsept(retsept_id),
 toiduaine_id int,
-retsept_id int,
-FOREIGN KEY (yhik_id) REFERENCES yhik(yhik_id),
-FOREIGN KEY (toiduaine_id) REFERENCES toiduaine(toiduaine_id),
-FOREIGN KEY (retsept_id) REFERENCES retsept(retsept_id),
-);
-INSERT INTO koostis (kogus, retsept_id)
-VALUES
-(3, 1),
-(2, 2),
-(1, 4),
-(4, 1);
+foreign key (toiduaine_id) references toiduaine(toiduaine_id),
+yhik_id int,
+foreign key (yhik_id) references yhik(yhik_id));
+insert into koostis (kogus, retsept_retsept_id, toiduaine_id, yhik_id)
+values (3, 1, 2, 2), (1, 2, 3, 1), (12, 3, 3, 1), (2, 4, 5, 2), (1, 5, 1, 2);
 
-drop table koostis;
 
-create table tehtud(
-tehtud_id int primary key identity(1,1),
+create table tehtud (
+tehtud_id int primary key identity (1,1),
 tehtud_kp date,
 retsept_id int,
-FOREIGN KEY (tehtud_id) REFERENCES retsept(retsept_id)
-);
-drop table tehtud;
-INSERT INTO tehtud(tehtud_kp, retsept_id)
-VALUES 
-('2025-06-23', 1),
-('2025-05-13', 2),('2025-02-28', 3),
-('2025-01-14', 4),('2025-04-02', 5)
-;
+foreign key (retsept_id) references retsept(retsept_id));
+insert into tehtud(tehtud_kp)
+values ('2024-02-15'), ('2025-01-15' ), ('2025-02-01'), ('2025-02-02'), ('2024-01-18');
+
+GRANT SELECT, INSERT ON toiduaine TO stafff;
+GRANT SELECT, INSERT ON kategooria TO stafff;
+GRANT SELECT ON kasutaja TO stafff;
+
+DENY DELETE, UPDATE ON toiduaine TO stafff;
+DENY DELETE, UPDATE ON kategooria TO stafff;
+DENY DELETE, UPDATE ON kasutaja TO stafff;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON toiduaine TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON kategooria TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON kasutaja TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON retsept TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON koostis TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON tehtud TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON yhik TO manager;
+
+DENY INSERT ON toiduaine TO manager;
+DENY INSERT ON kasutaja TO manager;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON retsept TO manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON koostis TO manager;
+
 
 select * from tehtud;
 select * from retsept;
